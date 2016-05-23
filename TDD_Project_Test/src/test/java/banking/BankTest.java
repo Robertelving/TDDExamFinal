@@ -1,45 +1,49 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package banking;
 
+import java.math.BigDecimal;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 
 /**
  *
  * @author Skroget
  */
 public class BankTest {
-    
-    public BankTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
+
     @Before
-    public void setUp() {
+    public void setUp() {        
+
     }
     
     @After
     public void tearDown() {
     }
-
+    
     @Test
-    public void testSomeMethod() {
-        fail("The test case is a prototype.");
+    public void transferTestCallOrder() {
+
+        BankIF bank = null;
+        AccountIF acc1 = null, acc2 = null;
+    
+        //Actors
+        bank = new Bank();
+        acc1 = mock(AccountIF.class);
+        acc2 = mock(AccountIF.class); 
+        
+        final BigDecimal transferAmount = BigDecimal.valueOf(500);
+        
+        //execute
+        bank.transfer(acc1, acc2, transferAmount);
+        
+        verify(acc1).withdraw(transferAmount);
+        verify(acc2).deposit(transferAmount);
+        
+        verifyNoMoreInteractions(acc1, acc2);
+
     }
     
 }
