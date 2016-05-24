@@ -1,9 +1,13 @@
 package banking;
 
 import java.math.BigDecimal;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
+import org.junit.Assert;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 
 
@@ -18,10 +22,7 @@ public class BankTest {
     public void setUp() {        
 
     }
-    
-    @After
-    public void tearDown() {
-    }
+
     
     @Test
     public void transferTestCallOrder() {
@@ -37,13 +38,15 @@ public class BankTest {
         final BigDecimal transferAmount = BigDecimal.valueOf(500);
         
         //execute
-        bank.transfer(acc1, acc2, transferAmount);
+        boolean result = bank.transfer(acc1, acc2, transferAmount);
         
         verify(acc1).withdraw(transferAmount);
         verify(acc2).deposit(transferAmount);
         
         verifyNoMoreInteractions(acc1, acc2);
 
+        assertThat(result, is(true));
+        
     }
     
 }

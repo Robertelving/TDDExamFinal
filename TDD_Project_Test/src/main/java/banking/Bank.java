@@ -10,7 +10,9 @@ public class Bank implements BankIF{
 
     @Override
     public boolean transfer(AccountIF sender, AccountIF receiver, BigDecimal amount) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sender.withdraw(amount);
+        receiver.deposit(amount);
+        return true;
     }
 
 }
