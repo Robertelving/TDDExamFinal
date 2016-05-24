@@ -33,6 +33,8 @@ public class BankTest {
 
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
 
@@ -45,6 +47,8 @@ public class BankTest {
 
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
     }
@@ -55,12 +59,17 @@ public class BankTest {
         transferAmount = BigDecimal.valueOf(500);
 
         when(acc1.getAccountType()).thenReturn("UnrecognizedType");
-        when(acc2.getAccountType()).thenReturn("CREDIT");
+        when(acc2.getAccountType()).thenReturn("UnrecognizedType");
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        verify(acc2).getAccountType();
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
+        
+        verifyNoMoreInteractions(acc1,acc2);
 
     }
     
@@ -75,9 +84,18 @@ public class BankTest {
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        
+        verify(acc2).getAccountType();
+        verify(acc1).getAccountType();
+        verify(acc1).getBalance();
+        
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
 
+        verifyNoMoreInteractions(acc1,acc2);
+        
     }
     
     @Test(expected = InsufficientFundsException.class)
@@ -91,9 +109,16 @@ public class BankTest {
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        verify(acc2).getAccountType();
+        verify(acc1).getAccountType();
+        verify(acc1).getBalance();
+        
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
 
+        verifyNoMoreInteractions(acc1,acc2);
     }
     
     @Test(expected = DepositLimitException.class)
@@ -106,8 +131,14 @@ public class BankTest {
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        verify(acc2).getAccountType();
+        
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
+        
+        verifyNoMoreInteractions(acc1,acc2);
 
     }
     
