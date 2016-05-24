@@ -8,10 +8,10 @@ import static org.mockito.Mockito.*;
 //TODO
 /*
  Withdraw less than 20000 on any account with sufficient funds 	| Expect Success
- Withdraw from CREDIT account so final balance > -30000 		| Expect Success
+ Withdraw from CREDIT account so final balance > -30000         | Expect Success
  Withdraw from CREDIT account so final balance < -30000		| Expect Exception
- Withdraw from DEBIT account so final balance >= 0			| Expect Success
- Withdraw from DEBIT account so final balance < -			| Expect Exception
+ Withdraw from DEBIT account so final balance >= 0		| Expect Success
+ Withdraw from DEBIT account so final balance < -		| Expect Exception
  Deposit to FUND account 5000					| Expect Success
  Deposit to FUND account 5001					| Expect Exception
     
@@ -59,6 +59,21 @@ public class BankTest {
         transferAmount = BigDecimal.valueOf(500);
 
         when(acc1.getAccountType()).thenReturn("UnrecognizedType");
+        
+        //execute
+        bank.transfer(acc1, acc2, transferAmount);
+        verify(acc1, never()).withdraw(transferAmount);
+        verify(acc2, never()).deposit(transferAmount);
+
+    }
+    
+    @Test(expected = InsufficientFundsException.class)
+    public void transferMethodTestCREDITInsufficientFundsException() throws Exception {
+
+        transferAmount = BigDecimal.valueOf(500);
+
+        when(acc1.getAccountType()).thenReturn("CREDIT");
+        when(acc1.getBalance()).thenReturn(BigDecimal.valueOf(-30001));
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
