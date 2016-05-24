@@ -32,7 +32,7 @@ public class BankTest {
     }
 
     @Test(expected = NegativeTransferAmountException.class)
-    public void transferMethodTestNegtiveTransferAmount() throws Exception {
+    public void transferMethodTestNegativeTransferAmount() throws Exception {
 
         transferAmount = BigDecimal.valueOf(-500);
 
@@ -41,6 +41,17 @@ public class BankTest {
         verify(acc1, never()).withdraw(transferAmount);
         verify(acc2, never()).deposit(transferAmount);
 
+    }
+    
+    @Test(expected = MoneyLaunderingException.class)
+    public void transferMethodTestOverUpperBoundaryTestAmount() throws Exception {
+        
+        transferAmount = BigDecimal.valueOf(20001);
+       
+        //execute
+        bank.transfer(acc1, acc2, transferAmount);
+        verify(acc1, never()).withdraw(transferAmount);
+        verify(acc2, never()).deposit(transferAmount);
     }
 
 }
