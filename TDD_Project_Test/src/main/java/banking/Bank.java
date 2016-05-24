@@ -40,6 +40,7 @@ public class Bank implements BankIF {
                 if(sender.getBalance().subtract(amount).compareTo(BigDecimal.valueOf(0)) == -1){
                     throw new InsufficientFundsException("DEBIT Account Insufficient funds");
                 }
+            break;
             default:
                 throw new UnrecognizedAccountTypeException("Sender Account Type not recognized");
         }
