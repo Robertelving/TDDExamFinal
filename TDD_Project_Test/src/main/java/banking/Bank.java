@@ -9,10 +9,8 @@ import java.math.BigDecimal;
 public class Bank implements BankIF{
 
     @Override
-    public boolean transfer(AccountIF sender, AccountIF receiver, BigDecimal amount) {
-        sender.withdraw(amount);
-        receiver.deposit(amount);
-        return true;
+    public boolean transfer(AccountIF sender, AccountIF receiver, BigDecimal amount) throws NegativeTransferAmountException {
+        throw new NegativeTransferAmountException("negative transfer amount");
     }
 
 }

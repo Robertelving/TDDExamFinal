@@ -15,9 +15,9 @@ public interface AccountIF {
     public String getAccountType();
     
     //withdraws amount from balance
-    public void withdraw(BigDecimal amount);
+    public BigDecimal withdraw(BigDecimal amount);
     
     //deposits amount to account 
-    public void deposit(BigDecimal amount);
+    public BigDecimal deposit(BigDecimal amount);
 
 }

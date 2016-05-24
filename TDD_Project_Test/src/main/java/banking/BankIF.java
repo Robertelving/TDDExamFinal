@@ -8,6 +8,6 @@ import java.math.BigDecimal;
  */
 public interface BankIF {
     
-    public boolean transfer(AccountIF sender, AccountIF receiver, BigDecimal amount);
+    public boolean transfer(AccountIF sender, AccountIF receiver, BigDecimal amount) throws Exception;
     
 }
