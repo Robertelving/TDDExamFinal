@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
  Withdraw from DEBIT account so final balance < -			| Expect Exception
  Deposit to FUND account 5000					| Expect Success
  Deposit to FUND account 5001					| Expect Exception
- Account Type Not Recognized                                         | Expect Exception
     
  */
 public class BankTest {
