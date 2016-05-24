@@ -22,6 +22,11 @@ public class Bank implements BankIF {
                 if(amount.compareTo(BigDecimal.valueOf(5000)) == 1){
                     throw new DepositLimitException("FUND account Deposit limit crossed");
                 }
+            case "CREDIT":
+            case "DEBIT":
+                break;
+            default:
+                throw new UnrecognizedAccountTypeException("Receiver Account Type not recognized");
         }
         
         switch(sender.getAccountType()){
@@ -29,6 +34,8 @@ public class Bank implements BankIF {
                 if(sender.getBalance().subtract(amount).compareTo(BigDecimal.valueOf(-30000)) == -1){
                     throw new InsufficientFundsException("CREDIT Account Insufficient funds");
                 }
+            break;
+            case "FUND" :
             case "DEBIT":
                 if(sender.getBalance().subtract(amount).compareTo(BigDecimal.valueOf(0)) == -1){
                     throw new InsufficientFundsException("DEBIT Account Insufficient funds");
@@ -37,6 +44,8 @@ public class Bank implements BankIF {
                 throw new UnrecognizedAccountTypeException("Sender Account Type not recognized");
         }
         
+        sender.withdraw(amount);
+        receiver.deposit(amount);
         
 
     }

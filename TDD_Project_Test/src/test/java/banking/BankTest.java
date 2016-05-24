@@ -110,5 +110,27 @@ public class BankTest {
         verify(acc2, never()).deposit(transferAmount);
 
     }
+    
+    @Test
+    public void transferMethodTestCREDITValidTransfer() throws Exception {
+
+        transferAmount = BigDecimal.valueOf(5001);
+
+        when(acc1.getAccountType()).thenReturn("CREDIT");
+        when(acc1.getBalance()).thenReturn(BigDecimal.valueOf(1000));
+        when(acc2.getAccountType()).thenReturn("CREDIT");
+        
+        //execute
+        bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        verify(acc2).getAccountType();
+        verify(acc1).getAccountType();
+        verify(acc1).getBalance();
+        
+        verify(acc1).withdraw(transferAmount);
+        verify(acc2).deposit(transferAmount);
+        verifyNoMoreInteractions(acc1,acc2);
+    }
 
 }
