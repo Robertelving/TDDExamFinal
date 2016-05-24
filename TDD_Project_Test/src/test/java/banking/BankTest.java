@@ -32,7 +32,7 @@ public class BankTest {
         final BigDecimal transferAmount = BigDecimal.valueOf(-500);
         
         //execute
-        boolean result = bank.transfer(acc1, acc2, transferAmount);
+        bank.transfer(acc1, acc2, transferAmount);
         verify(acc1,never()).withdraw(transferAmount);
         verify(acc2,never()).deposit(transferAmount);
         
