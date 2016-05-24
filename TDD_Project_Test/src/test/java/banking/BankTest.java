@@ -1,6 +1,9 @@
 package banking;
 
 import java.math.BigDecimal;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
@@ -143,10 +146,14 @@ public class BankTest {
     public void transferMethodTestCREDITValidTransfer() throws Exception {
 
         transferAmount = BigDecimal.valueOf(5000);
+        
+        BigDecimal acc1InitBalance = BigDecimal.ZERO;
+        BigDecimal acc2InitBalance = BigDecimal.ZERO;
 
         when(acc1.getAccountType()).thenReturn("CREDIT");
-        when(acc1.getBalance()).thenReturn(BigDecimal.valueOf(1000));
+        when(acc1.getBalance()).thenReturn(acc1InitBalance).thenReturn(acc1InitBalance.subtract(transferAmount));
         when(acc2.getAccountType()).thenReturn("CREDIT");
+        when(acc2.getBalance()).thenReturn(acc2InitBalance.add(transferAmount));
         
         //execute
         bank.transfer(acc1, acc2, transferAmount);
@@ -159,6 +166,10 @@ public class BankTest {
         verify(acc1).withdraw(transferAmount);
         verify(acc2).deposit(transferAmount);
         verifyNoMoreInteractions(acc1,acc2);
+        
+        assertThat(acc1.getBalance(),is(equalTo(BigDecimal.valueOf(-5000))));
+        assertThat(acc2.getBalance(),is(equalTo(BigDecimal.valueOf(5000))));
+        
     }
     
     @Test
@@ -204,5 +215,4 @@ public class BankTest {
         verify(acc2).deposit(transferAmount);
         verifyNoMoreInteractions(acc1,acc2);
     }
-
 }
