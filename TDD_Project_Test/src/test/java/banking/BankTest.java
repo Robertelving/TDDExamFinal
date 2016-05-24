@@ -7,10 +7,8 @@ import static org.mockito.Mockito.*;
 
 //TODO
 /*
- Withdraw less than 20000 on any account with sufficient funds 	| Expect Success
  Withdraw from DEBIT account so final balance >= 0		| Expect Success
  Deposit to FUND account 5000					| Expect Success
-    
  */
 public class BankTest {
 
@@ -145,10 +143,32 @@ public class BankTest {
     @Test
     public void transferMethodTestCREDITValidTransfer() throws Exception {
 
-        transferAmount = BigDecimal.valueOf(5001);
+        transferAmount = BigDecimal.valueOf(5000);
 
         when(acc1.getAccountType()).thenReturn("CREDIT");
         when(acc1.getBalance()).thenReturn(BigDecimal.valueOf(1000));
+        when(acc2.getAccountType()).thenReturn("CREDIT");
+        
+        //execute
+        bank.transfer(acc1, acc2, transferAmount);
+        
+        //Verify call order
+        verify(acc2).getAccountType();
+        verify(acc1).getAccountType();
+        verify(acc1).getBalance();
+        
+        verify(acc1).withdraw(transferAmount);
+        verify(acc2).deposit(transferAmount);
+        verifyNoMoreInteractions(acc1,acc2);
+    }
+    
+    @Test
+    public void transferMethodTestDEBITValidTransfer() throws Exception {
+
+        transferAmount = BigDecimal.valueOf(5000);
+
+        when(acc1.getAccountType()).thenReturn("DEBIT");
+        when(acc1.getBalance()).thenReturn(BigDecimal.valueOf(10000));
         when(acc2.getAccountType()).thenReturn("CREDIT");
         
         //execute
